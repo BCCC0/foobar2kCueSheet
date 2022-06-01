@@ -5,10 +5,13 @@ path = "./"
 
 directories = os.listdir(path)
 cues = os.path.join(path, "cues")
+cues_exist = os.listdir(cues)
 # myRe = re.compile('FILE "(.*)"')
 
 def writeCues(myL, name):
     cues_file = os.path.join(cues, name)
+    if name in cues_exist:
+        return
     counter = 1
     with open(cues_file, "w", encoding="utf-8") as output: 
         for i in myL:
@@ -18,10 +21,13 @@ def writeCues(myL, name):
             counter = counter + 1
 
 def moveCues(path, prefix, name):
+    cues_file = os.path.join(cues, name)
+    if name in cues_exist:
+        return
     try:
         with open(path,"r", encoding="utf8") as input:
             data = input.read()
-            with open(os.path.join(cues, name), "w", encoding="utf8") as output:
+            with open(cues_file, "w", encoding="utf8") as output:
                 output.write(re.sub('FILE "(.*)"', lambda m: "FILE \"" + os.path.join(prefix, m.group(1)) + "\"", data))
     except Exception as e:
         print(e)
